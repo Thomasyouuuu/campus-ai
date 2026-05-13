@@ -1,159 +1,460 @@
-const todayCourses = [
-  {
-    name: "计量经济学",
-    time: "10:00 - 11:40",
-    place: "经管楼 B302",
-    status: "想找复习搭子",
-  },
-  {
-    name: "传播学专题",
-    time: "14:00 - 15:40",
-    place: "三教 205",
-    status: "偶尔去",
-  },
-];
+"use client";
 
-const tags = ["摄影", "Citywalk", "论文互助", "自习搭子", "社恐友好"];
+import {
+  BookOpen,
+  Bot,
+  CalendarDays,
+  CheckSquare,
+  House,
+  Sparkles,
+  Tags,
+  UsersRound,
+} from "lucide-react";
+import { ReactNode, useState } from "react";
+import { ScheduleWorkspace } from "@/components/schedule/ScheduleWorkspace";
 
-const recommendations = [
+type ToolKey = "home" | "schedule" | "ai" | "course" | "ddl";
+type BoardKey = "tools" | "tag-world";
+
+const toolItems: Array<{
+  description: string;
+  icon: ReactNode;
+  key: ToolKey;
+  label: string;
+}> = [
   {
-    name: "林同学",
-    score: 86,
-    reason: "你们都上计量经济学，并且都标记了自习搭子。",
+    description: "日程、课程、DDL、社团活动",
+    icon: <House size={20} />,
+    key: "home",
+    label: "主页",
   },
   {
-    name: "周同学",
-    score: 78,
-    reason: "你们有 4 个共同 Tag，周五下午也都有空。",
+    description: "三日视图、课程、个人安排",
+    icon: <CalendarDays size={20} />,
+    key: "schedule",
+    label: "日程表",
+  },
+  {
+    description: "输入、总结、破冰和规划",
+    icon: <Bot size={28} />,
+    key: "ai",
+    label: "AI 输入",
+  },
+  {
+    description: "课程空间、笔记、疑问",
+    icon: <BookOpen size={20} />,
+    key: "course",
+    label: "课程",
+  },
+  {
+    description: "作业、考试、项目截止",
+    icon: <CheckSquare size={20} />,
+    key: "ddl",
+    label: "DDL Task",
   },
 ];
 
 export default function Home() {
+  const [board, setBoard] = useState<BoardKey>("tools");
+  const [activeTool, setActiveTool] = useState<ToolKey>("home");
+
   return (
-    <main className="min-h-screen bg-[#f7f7f2] text-stone-950">
-      <section className="mx-auto flex w-full max-w-6xl flex-col gap-8 px-5 py-6 sm:px-8 lg:py-10">
-        <nav className="flex items-center justify-between border-b border-stone-200 pb-5">
-          <div>
-            <p className="text-sm font-medium text-teal-700">Campus AI</p>
-            <h1 className="text-2xl font-semibold tracking-normal">
-              AI 校园学习与生活助手
-            </h1>
-          </div>
-          <Link
-            className="rounded-md bg-stone-950 px-4 py-2 text-sm font-medium text-white"
-            href="/schedule"
-          >
-            打开日程表
-          </Link>
-        </nav>
-
-        <div className="grid gap-5 lg:grid-cols-[1.4fr_0.9fr]">
-          <section className="rounded-lg border border-stone-200 bg-white p-5 shadow-sm">
-            <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
-              <div>
-                <p className="text-sm font-medium text-stone-500">今日工具台</p>
-                <h2 className="mt-1 text-3xl font-semibold tracking-normal">
-                  先管理学习生活，再自然遇见同频的人
-                </h2>
+    <main className="liquid-page min-h-screen overflow-hidden text-slate-950">
+      <section className="mx-auto flex w-full max-w-[1500px] flex-col gap-5 px-4 py-5 sm:px-6 lg:px-8">
+        <header className="liquid-glass overflow-hidden rounded-[34px] p-5 sm:p-6">
+          <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+            <div>
+              <div className="flex items-center gap-2 text-sm font-semibold text-teal-700">
+                <Sparkles size={18} />
+                Campus AI · Tool-first Workspace
               </div>
-              <span className="w-fit rounded-md bg-teal-50 px-3 py-2 text-sm font-medium text-teal-800">
-                MVP v0.1
-              </span>
+              <h1 className="mt-3 max-w-4xl text-4xl font-semibold leading-[0.96] tracking-normal sm:text-6xl">
+                先把校园生活整理清楚，再遇见同频的人
+              </h1>
             </div>
+            <p className="max-w-md text-sm leading-6 text-slate-600 sm:text-base">
+              首页先聚合自己的日程、课程、DDL 和社团活动。Tools 继续承载日程表、课程空间、AI 输入和任务管理。
+            </p>
+          </div>
+        </header>
 
-            <div className="mt-6 grid gap-3 sm:grid-cols-3">
-              {[
-                ["课表", "手动添加课程、公开设置、匹配开关"],
-                ["主页", "模块化编辑个人校园空间"],
-                ["Tag", "整理兴趣、学习目标和搭子需求"],
-              ].map(([title, desc]) => (
-                <div
-                  className="rounded-md border border-stone-200 bg-[#fbfbf7] p-4"
-                  key={title}
-                >
-                  <h3 className="font-semibold">{title}</h3>
-                  <p className="mt-2 text-sm leading-6 text-stone-600">{desc}</p>
-                </div>
-              ))}
-            </div>
-          </section>
+        <section className="paper-board rounded-[34px] p-3 sm:p-4">
+          <div className="grid grid-cols-2 items-end gap-2">
+            <BoardTab
+              active={board === "tools"}
+              label="Tools"
+              onClick={() => setBoard("tools")}
+            />
+            <BoardTab
+              active={board === "tag-world"}
+              label="Tag World"
+              onClick={() => setBoard("tag-world")}
+            />
+          </div>
 
-          <aside className="rounded-lg border border-stone-200 bg-white p-5 shadow-sm">
-            <p className="text-sm font-medium text-stone-500">我的 Tag</p>
-            <div className="mt-4 flex flex-wrap gap-2">
-              {tags.map((tag) => (
-                <span
-                  className="rounded-md border border-emerald-100 bg-emerald-50 px-3 py-2 text-sm font-medium text-emerald-800"
-                  key={tag}
-                >
-                  {tag}
-                </span>
-              ))}
-            </div>
-            <div className="mt-6 rounded-md bg-stone-950 p-4 text-white">
-              <p className="text-sm text-stone-300">AI 主页助手</p>
-              <p className="mt-2 text-lg font-medium">
-                帮你把“我是谁、想找谁、最近在做什么”写得自然一点。
-              </p>
-            </div>
-          </aside>
-        </div>
-
-        <div className="grid gap-5 lg:grid-cols-2">
-          <section className="rounded-lg border border-stone-200 bg-white p-5 shadow-sm">
-            <div className="flex items-center justify-between">
-              <h2 className="text-xl font-semibold">今天的课程</h2>
-              <span className="text-sm text-stone-500">周视图稍后接入</span>
-            </div>
-            <div className="mt-4 space-y-3">
-              {todayCourses.map((course) => (
-                <article
-                  className="rounded-md border border-stone-200 p-4"
-                  key={course.name}
-                >
-                  <div className="flex items-start justify-between gap-3">
-                    <div>
-                      <h3 className="font-semibold">{course.name}</h3>
-                      <p className="mt-1 text-sm text-stone-600">
-                        {course.time} · {course.place}
-                      </p>
-                    </div>
-                    <span className="rounded-md bg-amber-50 px-3 py-1 text-xs font-medium text-amber-800">
-                      {course.status}
-                    </span>
-                  </div>
-                </article>
-              ))}
-            </div>
-          </section>
-
-          <section className="rounded-lg border border-stone-200 bg-white p-5 shadow-sm">
-            <div className="flex items-center justify-between">
-              <h2 className="text-xl font-semibold">可能同频</h2>
-              <span className="text-sm text-stone-500">推荐后置，不打扰</span>
-            </div>
-            <div className="mt-4 space-y-3">
-              {recommendations.map((item) => (
-                <article
-                  className="rounded-md border border-stone-200 p-4"
-                  key={item.name}
-                >
-                  <div className="flex items-center justify-between">
-                    <h3 className="font-semibold">{item.name}</h3>
-                    <span className="text-sm font-semibold text-teal-700">
-                      {item.score} 分
-                    </span>
-                  </div>
-                  <p className="mt-2 text-sm leading-6 text-stone-600">
-                    {item.reason}
-                  </p>
-                </article>
-              ))}
-            </div>
-          </section>
-        </div>
+          <div className="relative -mt-px overflow-hidden rounded-b-[30px] rounded-tr-[30px] border border-white/70 bg-[#fff8dd]/72 p-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.72)] sm:p-5">
+            {board === "tools" ? (
+              <ToolsBoard
+                activeTool={activeTool}
+                onSelectTool={setActiveTool}
+              />
+            ) : (
+              <TagWorldBoard />
+            )}
+          </div>
+        </section>
       </section>
     </main>
   );
 }
-import Link from "next/link";
+
+function BoardTab({
+  active,
+  label,
+  onClick,
+}: {
+  active: boolean;
+  label: string;
+  onClick: () => void;
+}) {
+  return (
+    <button
+      className={`relative min-h-20 rounded-t-[30px] px-6 py-5 text-left transition ${
+        active
+          ? "z-10 bg-[#fff8dd] text-slate-950 shadow-[0_-10px_28px_rgba(92,72,30,0.08),inset_0_1px_0_rgba(255,255,255,0.88)]"
+          : "bg-[#efe4bd]/80 text-amber-950/55 hover:text-amber-950/80"
+      }`}
+      onClick={onClick}
+      type="button"
+    >
+      <span className="block text-3xl font-semibold tracking-normal sm:text-5xl">
+        {label}
+      </span>
+    </button>
+  );
+}
+
+function ToolsBoard({
+  activeTool,
+  onSelectTool,
+}: {
+  activeTool: ToolKey;
+  onSelectTool: (tool: ToolKey) => void;
+}) {
+  return (
+    <div className="grid gap-5">
+      <nav className="liquid-glass rounded-[30px] px-4 py-4">
+        <div className="grid grid-cols-5 items-end gap-2">
+          {toolItems.map((item, index) => (
+            <ToolButton
+              active={activeTool === item.key}
+              isCenter={index === 2}
+              item={item}
+              key={item.key}
+              onClick={() => onSelectTool(item.key)}
+            />
+          ))}
+        </div>
+      </nav>
+
+      <section className="min-h-[720px]">
+        {activeTool === "home" ? (
+          <HomeDashboard />
+        ) : activeTool === "schedule" ? (
+          <ScheduleWorkspace embedded />
+        ) : (
+          <PlaceholderTool tool={activeTool} />
+        )}
+      </section>
+    </div>
+  );
+}
+
+function ToolButton({
+  active,
+  isCenter,
+  item,
+  onClick,
+}: {
+  active: boolean;
+  isCenter: boolean;
+  item: (typeof toolItems)[number];
+  onClick: () => void;
+}) {
+  if (isCenter) {
+    return (
+      <button
+        className="group flex flex-col items-center gap-2 text-center"
+        onClick={onClick}
+        type="button"
+      >
+        <span
+          className={`liquid-orb flex h-24 w-24 items-center justify-center rounded-full transition ${
+            active ? "scale-105 text-white" : "text-slate-700"
+          }`}
+        >
+          {item.icon}
+        </span>
+        <span className="text-sm font-semibold">{item.label}</span>
+      </button>
+    );
+  }
+
+  return (
+    <button
+      className={`liquid-soft flex min-h-24 flex-col justify-between rounded-[24px] p-4 text-left transition hover:-translate-y-0.5 ${
+        active ? "ring-2 ring-slate-950/80" : ""
+      }`}
+      onClick={onClick}
+      type="button"
+    >
+      <span className="flex items-center justify-between gap-3">
+        <span className="text-slate-700">{item.icon}</span>
+        <span className="text-xs font-semibold text-slate-500">Tool</span>
+      </span>
+      <span>
+        <span className="block text-base font-semibold">{item.label}</span>
+        <span className="mt-1 line-clamp-2 block text-xs leading-5 text-slate-500">
+          {item.description}
+        </span>
+      </span>
+    </button>
+  );
+}
+
+function HomeDashboard() {
+  const cards = [
+    {
+      accent: "bg-sky-400/70",
+      icon: <BookOpen size={20} />,
+      label: "课程",
+      title: "3 门课程在本周活跃",
+      body: "课程板块会承载 AI 总结、共享笔记、疑问和聊天室",
+    },
+    {
+      accent: "bg-violet-400/70",
+      icon: <CheckSquare size={20} />,
+      label: "DDL",
+      title: "论文选题草稿 · 周五前",
+      body: "后续会按重要程度和剩余时间自动排序",
+    },
+    {
+      accent: "bg-amber-400/70",
+      icon: <UsersRound size={20} />,
+      label: "社团活动",
+      title: "摄影社周末 Citywalk",
+      body: "社团活动先作为入口保留，后续接报名和活动日历",
+    },
+  ];
+
+  return (
+    <section className="grid gap-5 lg:grid-cols-[1.15fr_0.85fr]">
+      <div className="liquid-glass rounded-[32px] p-5">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+          <div>
+            <p className="text-sm font-semibold text-teal-700">Home</p>
+            <h2 className="mt-2 text-4xl font-semibold leading-none">
+              今天先看这些
+            </h2>
+          </div>
+          <span className="w-fit rounded-full bg-white/38 px-3 py-2 text-xs font-semibold text-slate-600 backdrop-blur-md">
+            默认主页
+          </span>
+        </div>
+
+        <MiniSchedulePreview />
+
+        <div className="mt-4 grid gap-3 lg:grid-cols-3">
+          {cards.map((card) => (
+            <article
+              className="liquid-soft group relative min-h-40 overflow-hidden rounded-[26px] p-4 transition hover:-translate-y-0.5"
+              key={card.label}
+            >
+              <div
+                className={`absolute inset-y-5 left-4 w-1 rounded-full ${card.accent}`}
+              />
+              <div className="pl-4">
+                <div className="flex items-center justify-between gap-3">
+                  <span className="flex items-center gap-2 text-sm font-semibold text-slate-700">
+                    {card.icon}
+                    {card.label}
+                  </span>
+                  <span className="rounded-full bg-white/40 px-2 py-1 text-[10px] font-semibold text-slate-500 backdrop-blur-md">
+                    Active
+                  </span>
+                </div>
+                <h3 className="mt-6 text-xl font-semibold leading-tight">
+                  {card.title}
+                </h3>
+                <p className="mt-3 text-sm leading-6 text-slate-600">
+                  {card.body}
+                </p>
+              </div>
+            </article>
+          ))}
+        </div>
+      </div>
+
+      <aside className="paper-board rounded-[32px] p-5">
+        <div className="liquid-glass rounded-[28px] p-5">
+          <p className="text-sm font-semibold text-teal-700">AI Brief</p>
+          <h3 className="mt-3 text-3xl font-semibold leading-tight">
+            把今天的课、DDL 和活动压成一张行动卡
+          </h3>
+          <p className="mt-4 text-sm leading-6 text-slate-600">
+            首页只放你今天最需要处理的信息。AI 输入板块后续可以从这里接管总结、拆任务和生成提醒。
+          </p>
+        </div>
+      </aside>
+    </section>
+  );
+}
+
+function MiniSchedulePreview() {
+  const days = [
+    { label: "周一", short: "一" },
+    { label: "周二", short: "二" },
+    { label: "周三", short: "三" },
+  ];
+  const hours = ["09:00", "12:00", "15:00", "18:00"];
+  const events = [
+    {
+      day: 0,
+      top: "29%",
+      height: "23%",
+      title: "计量经济学",
+      time: "10:00 - 11:40",
+      tone: "emerald",
+    },
+    {
+      day: 1,
+      top: "61%",
+      height: "24%",
+      title: "传播学专题",
+      time: "14:00 - 15:40",
+      tone: "emerald",
+    },
+    {
+      day: 2,
+      top: "76%",
+      height: "18%",
+      title: "和室友吃饭",
+      time: "18:30 - 19:30",
+      tone: "sky",
+    },
+  ];
+
+  return (
+    <section className="paper-board mt-6 overflow-hidden rounded-[30px] p-3">
+      <div className="flex items-center justify-between px-2 pb-3">
+        <div>
+          <p className="flex items-center gap-2 text-sm font-semibold text-teal-700">
+            <CalendarDays size={16} />
+            自己的日程
+          </p>
+          <h3 className="mt-1 text-2xl font-semibold">三日缩略视图</h3>
+        </div>
+        <span className="rounded-full bg-white/48 px-3 py-1.5 text-xs font-semibold text-slate-600 backdrop-blur-md">
+          预览
+        </span>
+      </div>
+
+      <div className="grid h-[360px] grid-cols-[64px_1fr] overflow-hidden rounded-[24px] border border-white/64 bg-white/18">
+        <div className="relative border-r border-white/58 bg-[#fff8dd]/42">
+          {hours.map((hour, index) => (
+            <span
+              className="absolute left-3 text-xs font-semibold text-amber-950/38"
+              key={hour}
+              style={{ top: `${12 + index * 24}%` }}
+            >
+              {hour}
+            </span>
+          ))}
+        </div>
+
+        <div className="relative grid grid-cols-3">
+          {days.map((day, dayIndex) => (
+            <div
+              className="relative border-r border-white/48 last:border-r-0"
+              key={day.label}
+            >
+              <div className="sticky top-0 z-10 border-b border-white/52 bg-[#fff8dd]/44 px-3 py-3 backdrop-blur-md">
+                <p className="text-xs font-semibold text-amber-950/44">
+                  {day.label}
+                </p>
+                <p className="text-xl font-semibold text-slate-900">
+                  {day.short}
+                </p>
+              </div>
+              {hours.map((hour, index) => (
+                <div
+                  className="absolute left-0 right-0 border-t border-white/42"
+                  key={`${day.label}-${hour}`}
+                  style={{ top: `${22 + index * 24}%` }}
+                />
+              ))}
+              {events
+                .filter((event) => event.day === dayIndex)
+                .map((event) => (
+                  <article
+                    className={`liquid-distort-glass left-3 right-3 rounded-[20px] p-3 ${
+                      event.tone === "sky" ? "text-sky-800" : "text-emerald-800"
+                    }`}
+                    key={event.title}
+                    style={{ top: event.top, height: event.height }}
+                  >
+                    <div className="glass-lens" />
+                    <div className="relative z-10">
+                      <p className="text-[10px] font-semibold">
+                        {event.tone === "sky" ? "安排" : "课程"}
+                      </p>
+                      <h4 className="mt-1 line-clamp-2 text-sm font-semibold leading-tight">
+                        {event.title}
+                      </h4>
+                      <p className="mt-1 truncate text-[11px] font-semibold text-slate-600/88">
+                        {event.time}
+                      </p>
+                    </div>
+                  </article>
+                ))}
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function PlaceholderTool({ tool }: { tool: ToolKey }) {
+  const current = toolItems.find((item) => item.key === tool);
+
+  return (
+    <section className="liquid-glass flex min-h-[520px] items-center justify-center rounded-[32px] p-8 text-center">
+      <div className="max-w-md">
+        <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-white/34 text-slate-700 shadow-[inset_0_1px_0_rgba(255,255,255,0.8),0_18px_40px_rgba(31,47,62,0.12)] backdrop-blur-xl">
+          {current?.icon}
+        </div>
+        <h2 className="mt-5 text-3xl font-semibold">{current?.label}</h2>
+        <p className="mt-3 text-sm leading-6 text-slate-600">
+          这个板块会在日程表稳定之后继续展开。当前先保留入口和信息架构，避免第一版过度复杂。
+        </p>
+      </div>
+    </section>
+  );
+}
+
+function TagWorldBoard() {
+  return (
+    <section className="liquid-glass grid min-h-[620px] place-items-center rounded-[32px] p-8 text-center">
+      <div className="max-w-lg">
+        <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-white/34 text-teal-700 shadow-[inset_0_1px_0_rgba(255,255,255,0.8),0_18px_40px_rgba(31,47,62,0.12)] backdrop-blur-xl">
+          <Tags size={30} />
+        </div>
+        <h2 className="mt-5 text-4xl font-semibold">Tag World</h2>
+        <p className="mt-3 text-sm leading-6 text-slate-600">
+          后续这里承载同频发现、兴趣标签、搭子需求和主页推荐。现在先和 Tools 分开，保持产品结构清楚。
+        </p>
+      </div>
+    </section>
+  );
+}

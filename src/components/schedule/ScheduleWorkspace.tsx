@@ -73,7 +73,11 @@ const visibilityOptions = [
   },
 ] as const;
 
-export function ScheduleWorkspace() {
+export function ScheduleWorkspace({
+  embedded = false,
+}: {
+  embedded?: boolean;
+} = {}) {
   const [courses, setCourses] = useState<ScheduleCourse[]>(() => {
     if (typeof window === "undefined") {
       return initialCourses;
@@ -236,9 +240,22 @@ export function ScheduleWorkspace() {
   }
 
   return (
-    <main className="liquid-page min-h-screen overflow-hidden text-slate-950">
-      <div className="mx-auto flex w-full max-w-7xl flex-col gap-5 px-4 py-5 sm:px-6 lg:px-8 lg:py-8">
-        <header className="liquid-glass rounded-[28px] p-5 sm:p-6">
+    <main
+      className={
+        embedded
+          ? "text-slate-950"
+          : "liquid-page min-h-screen overflow-hidden text-slate-950"
+      }
+    >
+      <div
+        className={
+          embedded
+            ? "flex w-full flex-col gap-5"
+            : "mx-auto flex w-full max-w-7xl flex-col gap-5 px-4 py-5 sm:px-6 lg:px-8 lg:py-8"
+        }
+      >
+        {!embedded && (
+          <header className="liquid-glass rounded-[28px] p-5 sm:p-6">
           <div className="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
             <div className="max-w-3xl">
               <div className="flex items-center gap-2 text-sm font-semibold text-teal-700">
@@ -259,7 +276,8 @@ export function ScheduleWorkspace() {
               <Metric label="参与匹配" value={matchingCount} />
             </div>
           </div>
-        </header>
+          </header>
+        )}
 
         <section className="grid gap-5 xl:grid-cols-[minmax(0,1.95fr)_minmax(360px,0.75fr)]">
           <div className="liquid-glass rounded-[28px] p-4 sm:p-5">
