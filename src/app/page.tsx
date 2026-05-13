@@ -2,65 +2,24 @@
 
 import {
   BookOpen,
-  Bot,
   CalendarDays,
   CheckSquare,
-  House,
   Sparkles,
   Tags,
   UsersRound,
+  Wrench,
 } from "lucide-react";
-import { ReactNode, useState } from "react";
-import { ScheduleWorkspace } from "@/components/schedule/ScheduleWorkspace";
+import { useState } from "react";
+import { GlobalDock } from "@/components/navigation/GlobalDock";
 
-type ToolKey = "home" | "schedule" | "ai" | "course" | "ddl";
 type BoardKey = "tools" | "tag-world";
-
-const toolItems: Array<{
-  description: string;
-  icon: ReactNode;
-  key: ToolKey;
-  label: string;
-}> = [
-  {
-    description: "日程、课程、DDL、社团活动",
-    icon: <House size={20} />,
-    key: "home",
-    label: "主页",
-  },
-  {
-    description: "三日视图、课程、个人安排",
-    icon: <CalendarDays size={20} />,
-    key: "schedule",
-    label: "日程表",
-  },
-  {
-    description: "输入、总结、破冰和规划",
-    icon: <Bot size={28} />,
-    key: "ai",
-    label: "AI 输入",
-  },
-  {
-    description: "课程空间、笔记、疑问",
-    icon: <BookOpen size={20} />,
-    key: "course",
-    label: "课程",
-  },
-  {
-    description: "作业、考试、项目截止",
-    icon: <CheckSquare size={20} />,
-    key: "ddl",
-    label: "DDL Task",
-  },
-];
 
 export default function Home() {
   const [board, setBoard] = useState<BoardKey>("tools");
-  const [activeTool, setActiveTool] = useState<ToolKey>("home");
 
   return (
     <main className="liquid-page min-h-screen overflow-hidden text-slate-950">
-      <section className="mx-auto flex w-full max-w-[1500px] flex-col gap-5 px-4 py-5 sm:px-6 lg:px-8">
+      <section className="mx-auto flex w-full max-w-[1500px] flex-col gap-5 px-4 pb-48 pt-5 sm:px-6 lg:px-8">
         <header className="liquid-glass overflow-hidden rounded-[34px] p-5 sm:p-6">
           <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
             <div>
@@ -94,16 +53,14 @@ export default function Home() {
 
           <div className="relative -mt-px overflow-hidden rounded-b-[30px] rounded-tr-[30px] border border-white/70 bg-[#fff8dd]/72 p-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.72)] sm:p-5">
             {board === "tools" ? (
-              <ToolsBoard
-                activeTool={activeTool}
-                onSelectTool={setActiveTool}
-              />
+              <ToolsBoard />
             ) : (
               <TagWorldBoard />
             )}
           </div>
         </section>
       </section>
+      <GlobalDock />
     </main>
   );
 }
@@ -134,91 +91,56 @@ function BoardTab({
   );
 }
 
-function ToolsBoard({
-  activeTool,
-  onSelectTool,
-}: {
-  activeTool: ToolKey;
-  onSelectTool: (tool: ToolKey) => void;
-}) {
+function ToolsBoard() {
   return (
     <div className="grid gap-5">
-      <nav className="liquid-glass rounded-[30px] px-4 py-4">
-        <div className="grid grid-cols-5 items-end gap-2">
-          {toolItems.map((item, index) => (
-            <ToolButton
-              active={activeTool === item.key}
-              isCenter={index === 2}
-              item={item}
-              key={item.key}
-              onClick={() => onSelectTool(item.key)}
-            />
-          ))}
-        </div>
-      </nav>
+      <QuickAccessCards />
 
       <section className="min-h-[720px]">
-        {activeTool === "home" ? (
-          <HomeDashboard />
-        ) : activeTool === "schedule" ? (
-          <ScheduleWorkspace embedded />
-        ) : (
-          <PlaceholderTool tool={activeTool} />
-        )}
+        <HomeDashboard />
       </section>
     </div>
   );
 }
 
-function ToolButton({
-  active,
-  isCenter,
-  item,
-  onClick,
-}: {
-  active: boolean;
-  isCenter: boolean;
-  item: (typeof toolItems)[number];
-  onClick: () => void;
-}) {
-  if (isCenter) {
-    return (
-      <button
-        className="group flex flex-col items-center gap-2 text-center"
-        onClick={onClick}
-        type="button"
-      >
-        <span
-          className={`liquid-orb flex h-24 w-24 items-center justify-center rounded-full transition ${
-            active ? "scale-105 text-white" : "text-slate-700"
-          }`}
-        >
-          {item.icon}
-        </span>
-        <span className="text-sm font-semibold">{item.label}</span>
-      </button>
-    );
-  }
+function QuickAccessCards() {
+  const quickCards = [
+    {
+      body: "校历、地图、校园服务、常用入口会收在这里。",
+      icon: <Wrench size={22} />,
+      title: "校内工具",
+    },
+    {
+      body: "作业、论文、考试和项目截止时间的任务中心。",
+      icon: <CheckSquare size={22} />,
+      title: "DDL",
+    },
+  ];
 
   return (
-    <button
-      className={`liquid-soft flex min-h-24 flex-col justify-between rounded-[24px] p-4 text-left transition hover:-translate-y-0.5 ${
-        active ? "ring-2 ring-slate-950/80" : ""
-      }`}
-      onClick={onClick}
-      type="button"
-    >
-      <span className="flex items-center justify-between gap-3">
-        <span className="text-slate-700">{item.icon}</span>
-        <span className="text-xs font-semibold text-slate-500">Tool</span>
-      </span>
-      <span>
-        <span className="block text-base font-semibold">{item.label}</span>
-        <span className="mt-1 line-clamp-2 block text-xs leading-5 text-slate-500">
-          {item.description}
-        </span>
-      </span>
-    </button>
+    <section className="grid gap-3 lg:grid-cols-2">
+      {quickCards.map((card) => (
+        <article
+          className="liquid-soft min-h-28 rounded-[28px] p-5 transition hover:-translate-y-0.5"
+          key={card.title}
+        >
+          <div className="flex items-start justify-between gap-4">
+            <div>
+              <p className="text-sm font-semibold text-teal-700">Quick</p>
+              <h2 className="mt-2 text-3xl font-semibold leading-none">
+                {card.title}
+              </h2>
+              <p className="mt-3 text-sm leading-6 text-slate-600">
+                {card.body}
+              </p>
+            </div>
+            <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-white/32 text-slate-700 shadow-[inset_0_1px_0_rgba(255,255,255,0.8),0_14px_30px_rgba(31,47,62,0.1)] backdrop-blur-xl">
+              {card.icon}
+            </div>
+          </div>
+        </article>
+      ))}
+    </section>
   );
 }
 
@@ -420,24 +342,6 @@ function MiniSchedulePreview() {
             </div>
           ))}
         </div>
-      </div>
-    </section>
-  );
-}
-
-function PlaceholderTool({ tool }: { tool: ToolKey }) {
-  const current = toolItems.find((item) => item.key === tool);
-
-  return (
-    <section className="liquid-glass flex min-h-[520px] items-center justify-center rounded-[32px] p-8 text-center">
-      <div className="max-w-md">
-        <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-white/34 text-slate-700 shadow-[inset_0_1px_0_rgba(255,255,255,0.8),0_18px_40px_rgba(31,47,62,0.12)] backdrop-blur-xl">
-          {current?.icon}
-        </div>
-        <h2 className="mt-5 text-3xl font-semibold">{current?.label}</h2>
-        <p className="mt-3 text-sm leading-6 text-slate-600">
-          这个板块会在日程表稳定之后继续展开。当前先保留入口和信息架构，避免第一版过度复杂。
-        </p>
       </div>
     </section>
   );

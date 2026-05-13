@@ -1,11 +1,11 @@
+import { CoursesWorkspace } from "@/components/course/CoursesWorkspace";
 import { GlobalDock } from "@/components/navigation/GlobalDock";
-import { ScheduleWorkspace } from "@/components/schedule/ScheduleWorkspace";
 
-export default function SchedulePage() {
+export default function CoursesPage() {
   return (
     <>
       <div className="pb-48">
-        <ScheduleWorkspace />
+        <CoursesWorkspace />
       </div>
       <GlobalDock />
     </>

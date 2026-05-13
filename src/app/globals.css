@@ -3,6 +3,8 @@
 :root {
   --background: #eef4f8;
   --foreground: #1d1d1b;
+  --font-geist-sans: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-geist-mono: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
 }
 
 @theme inline {
@@ -100,6 +102,127 @@ body {
   background: radial-gradient(circle, rgba(20, 184, 166, 0.18), transparent 68%);
   filter: blur(18px);
   opacity: 0.8;
+}
+
+.liquid-dock {
+  position: relative;
+  isolation: isolate;
+  border: 1px solid rgba(255, 255, 255, 0.72);
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.18), rgba(255, 255, 255, 0.035) 58%, rgba(125, 211, 252, 0.07)),
+    rgba(255, 255, 255, 0.035);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.78),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.12),
+    0 24px 64px rgba(31, 47, 62, 0.2),
+    0 3px 16px rgba(255, 255, 255, 0.42);
+  backdrop-filter: blur(30px) saturate(1.95) contrast(1.12);
+  -webkit-backdrop-filter: blur(30px) saturate(1.95) contrast(1.12);
+}
+
+.liquid-dock::before {
+  content: "";
+  pointer-events: none;
+  position: absolute;
+  inset: 5px;
+  z-index: -1;
+  border-radius: inherit;
+  background:
+    linear-gradient(112deg, rgba(255, 255, 255, 0.44), transparent 32%),
+    repeating-linear-gradient(92deg, rgba(255, 255, 255, 0.1) 0 1px, transparent 1px 16px);
+  filter: blur(1px);
+  opacity: 0.72;
+}
+
+.liquid-dock-orb {
+  position: relative;
+  isolation: isolate;
+  border: 1px solid rgba(255, 255, 255, 0.82);
+  background:
+    radial-gradient(circle at 30% 18%, rgba(255, 255, 255, 0.62), transparent 18%),
+    radial-gradient(circle at 70% 76%, rgba(45, 212, 191, 0.12), transparent 28%),
+    linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.025) 58%, rgba(148, 163, 184, 0.08)),
+    rgba(255, 255, 255, 0.028);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.86),
+    inset 10px 14px 20px rgba(255, 255, 255, 0.16),
+    inset -12px -16px 26px rgba(20, 184, 166, 0.06),
+    0 18px 44px rgba(31, 47, 62, 0.16),
+    0 2px 12px rgba(255, 255, 255, 0.42);
+  backdrop-filter: blur(28px) saturate(2) contrast(1.16) brightness(1.04);
+  -webkit-backdrop-filter: blur(28px) saturate(2) contrast(1.16) brightness(1.04);
+}
+
+.liquid-dock-orb::before {
+  content: "";
+  pointer-events: none;
+  position: absolute;
+  inset: 13%;
+  z-index: -1;
+  border-radius: inherit;
+  background:
+    linear-gradient(118deg, rgba(255, 255, 255, 0.56), transparent 43%),
+    radial-gradient(circle at 60% 62%, rgba(255, 255, 255, 0.14), transparent 42%);
+  filter: blur(0.8px);
+  transform: translate(-1px, -1px) scale(1.12);
+}
+
+.profile-trigger {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  z-index: 60;
+  isolation: isolate;
+  border: 1px solid rgba(255, 255, 255, 0.82);
+  background:
+    radial-gradient(circle at 30% 18%, rgba(255, 255, 255, 0.62), transparent 18%),
+    radial-gradient(circle at 70% 76%, rgba(45, 212, 191, 0.12), transparent 28%),
+    linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.025) 58%, rgba(148, 163, 184, 0.08)),
+    rgba(255, 255, 255, 0.028);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.86),
+    inset 10px 14px 20px rgba(255, 255, 255, 0.16),
+    inset -12px -16px 26px rgba(20, 184, 166, 0.06),
+    0 18px 44px rgba(31, 47, 62, 0.16),
+    0 2px 12px rgba(255, 255, 255, 0.42);
+  backdrop-filter: blur(28px) saturate(2) contrast(1.16) brightness(1.04);
+  -webkit-backdrop-filter: blur(28px) saturate(2) contrast(1.16) brightness(1.04);
+}
+
+.profile-trigger::before {
+  content: "";
+  pointer-events: none;
+  position: absolute;
+  inset: 13%;
+  z-index: -1;
+  border-radius: inherit;
+  background:
+    linear-gradient(118deg, rgba(255, 255, 255, 0.56), transparent 43%),
+    radial-gradient(circle at 60% 62%, rgba(255, 255, 255, 0.14), transparent 42%);
+  filter: blur(0.8px);
+  transform: translate(-1px, -1px) scale(1.12);
+}
+
+.profile-panel {
+  position: absolute;
+  isolation: isolate;
+  border: 1px solid rgba(255, 255, 255, 0.78);
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.38), rgba(255, 255, 255, 0.12) 54%, rgba(215, 240, 255, 0.14)),
+    rgba(255, 255, 255, 0.1);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.92),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.22),
+    0 24px 58px rgba(28, 48, 67, 0.14);
+  backdrop-filter: blur(26px) saturate(1.75) contrast(1.04);
+  -webkit-backdrop-filter: blur(26px) saturate(1.75) contrast(1.04);
+}
+
+@media (min-width: 640px) {
+  .profile-trigger {
+    top: 1.25rem;
+    right: 1.5rem;
+  }
 }
 
 .field-input {
