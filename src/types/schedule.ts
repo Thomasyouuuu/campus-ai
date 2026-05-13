@@ -1,6 +1,6 @@
 export type WeekType = "all" | "odd" | "even";
 
-export type CourseVisibility = "public" | "private";
+export type CourseVisibility = "public" | "busy" | "private";
 
 export type ScheduleItemType = "course" | "personal";
 
