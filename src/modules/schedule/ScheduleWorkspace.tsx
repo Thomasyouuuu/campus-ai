@@ -35,10 +35,10 @@ import type {
 
 const storageKey = "campus-ai-schedule-v2";
 const dayHeaderHeight = 76;
-const minHourHeight = 28;
-const maxHourHeight = 112;
-const compactThreshold = 36;
-const defaultHourHeight = 66;
+const minHourHeight = 24;
+const maxHourHeight = 104;
+const compactThreshold = 32;
+const defaultHourHeight = 58;
 const minDayWidth = 68;
 const maxDayWidth = 240;
 const timeColumnWidth = 72;
@@ -335,7 +335,7 @@ function ScheduleTable({
   const hourHeight = clamp(defaultHourHeight * scale, minHourHeight, maxHourHeight);
   const dayWidth = clamp(baseDayWidth * scale, minDayWidth, maxDayWidth);
   const isCompact = hourHeight <= compactThreshold || dayWidth <= 76;
-  const viewportHeight = defaultHourHeight * 7;
+  const viewportHeight = defaultHourHeight * 8;
   const contentHeight = hourHeight * 24;
   const gridTemplateColumns = `${timeColumnWidth}px repeat(${days.length}, ${dayWidth}px)`;
 
@@ -347,7 +347,7 @@ function ScheduleTable({
     }
 
     if (!didInitialScroll.current) {
-      viewport.scrollTop = Math.max(0, hourHeight * 7);
+      viewport.scrollTop = Math.max(0, hourHeight * 7.5);
       didInitialScroll.current = true;
     }
   }, [hourHeight]);
@@ -434,6 +434,8 @@ function ScheduleTable({
   }
 
   function handlePointerMove(event: ReactPointerEvent<HTMLDivElement>) {
+    event.preventDefault();
+
     if (pointers.current.has(event.pointerId)) {
       pointers.current.set(event.pointerId, { x: event.clientX, y: event.clientY });
     }
@@ -517,7 +519,7 @@ function ScheduleTable({
       </div>
 
       <div
-        className="schedule-scroll touch-none overflow-auto overscroll-contain scroll-smooth bg-[#fff8dd]/68"
+        className="schedule-scroll cursor-grab touch-none select-none overflow-auto overscroll-contain scroll-smooth bg-[#fff8dd]/68 active:cursor-grabbing"
         onPointerCancel={stopGesture}
         onPointerDown={handlePointerDown}
         onPointerMove={handlePointerMove}

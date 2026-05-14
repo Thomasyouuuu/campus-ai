@@ -13,7 +13,7 @@ export function AppShell({
   maxWidth = "max-w-7xl",
 }: AppShellProps) {
   return (
-    <main className="liquid-page min-h-screen overflow-hidden text-slate-950">
+    <main className="liquid-page flex min-h-dvh flex-col overflow-hidden text-slate-950">
       <section
         className={`mobile-page-shell mobile-page-x mx-auto flex w-full flex-col ${maxWidth} ${contentClassName}`}
       >
