@@ -1,10 +1,16 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { ProfilePreviewButton } from "@/components/navigation/ProfilePreviewButton";
 import "./globals.css";
 
 export const metadata: Metadata = {
   title: "Campus AI",
   description: "AI campus workspace for schedules, profiles, tags, and sync discovery.",
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover",
 };
 
 export default function RootLayout({

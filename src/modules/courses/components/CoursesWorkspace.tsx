@@ -82,7 +82,7 @@ export function CoursesWorkspace() {
   if (selectedCourse) {
     return (
       <div className="liquid-page min-h-screen overflow-hidden text-slate-950">
-        <div className="mx-auto flex w-full max-w-7xl flex-col gap-5 px-4 py-5 sm:px-6 lg:px-8 lg:py-8">
+        <div className="mobile-page-x mx-auto flex w-full max-w-7xl flex-col gap-5 py-4 sm:py-5 lg:py-8">
           <CourseDetail
             course={selectedCourse}
             onBack={() => setSelectedCourseId(null)}
@@ -94,19 +94,19 @@ export function CoursesWorkspace() {
 
   return (
     <div className="liquid-page min-h-screen overflow-hidden text-slate-950">
-      <div className="mx-auto flex w-full max-w-7xl flex-col gap-5 px-4 py-5 sm:px-6 lg:px-8 lg:py-8">
-        <header className="liquid-glass rounded-[32px] p-5 sm:p-6">
+      <div className="mobile-page-x mx-auto flex w-full max-w-7xl flex-col gap-5 py-4 sm:py-5 lg:py-8">
+        <header className="liquid-glass rounded-[28px] p-4 sm:rounded-[32px] sm:p-6">
           <div className="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
             <div>
               <p className="text-sm font-semibold text-teal-700">课程空间</p>
-              <h1 className="mt-3 text-3xl font-semibold tracking-normal sm:text-5xl">
+              <h1 className="mt-3 text-[1.9rem] font-semibold leading-[1.08] tracking-normal sm:text-5xl">
                 每门课都是你的学习社区与 AI 自学工作台
               </h1>
-              <p className="mt-4 max-w-2xl text-base leading-7 text-slate-600">
+              <p className="mt-4 max-w-2xl text-sm leading-6 text-slate-600 sm:text-base sm:leading-7">
                 在这里搜课程、添加课程、进入我的课程。每门课可以承载笔记、聊天室、DDL、成员和 AI 学习导引。
               </p>
             </div>
-            <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
+            <div className="grid grid-cols-3 gap-2">
               <SummaryCard label="已加入课程" value={2} icon={<FolderOpen size={18} />} />
               <SummaryCard label="待处理 DDL" value={7} icon={<ClipboardList size={18} />} />
               <SummaryCard label="AI 自学" value={1} icon={<Sparkles size={18} />} />
@@ -136,7 +136,7 @@ export function CoursesWorkspace() {
               ))}
             </div>
 
-            <div className="liquid-glass rounded-[32px] p-5 sm:p-6">
+            <div className="liquid-glass rounded-[28px] p-4 sm:rounded-[32px] sm:p-6">
               {activeSection === "search" ? (
                 <CourseSearchPanel
                   query={searchQuery}
@@ -156,7 +156,7 @@ export function CoursesWorkspace() {
           </div>
 
           <aside className="flex flex-col gap-5">
-            <div className="liquid-glass rounded-[32px] p-5">
+            <div className="liquid-glass rounded-[28px] p-4 sm:rounded-[32px] sm:p-5">
               <div className="flex items-center gap-3">
                 <Sparkles size={20} className="text-emerald-700" />
                 <div>
@@ -173,7 +173,7 @@ export function CoursesWorkspace() {
               </div>
             </div>
 
-            <div className="liquid-soft rounded-[32px] p-5">
+            <div className="liquid-soft rounded-[28px] p-4 sm:rounded-[32px] sm:p-5">
               <p className="text-sm font-semibold text-teal-700">课程快览</p>
               <div className="mt-4 space-y-3">
                 {mockCourseList.slice(0, 2).map((course) => (
@@ -197,12 +197,12 @@ export function CoursesWorkspace() {
 
 function SummaryCard({ label, value, icon }: { label: string; value: number; icon: React.ReactNode }) {
   return (
-    <div className="rounded-[28px] bg-white/80 px-5 py-4 shadow-[0_18px_40px_rgba(31,47,62,0.08)] backdrop-blur-md">
-      <div className="flex items-center gap-3 text-slate-800">
-        <span className="rounded-2xl bg-slate-950/5 p-2 text-slate-700">{icon}</span>
+    <div className="rounded-[22px] bg-white/80 px-3 py-3 shadow-[0_18px_40px_rgba(31,47,62,0.08)] backdrop-blur-md sm:rounded-[28px] sm:px-5 sm:py-4">
+      <div className="flex flex-col gap-2 text-slate-800 sm:flex-row sm:items-center sm:gap-3">
+        <span className="w-fit rounded-2xl bg-slate-950/5 p-2 text-slate-700">{icon}</span>
         <div>
-          <p className="text-2xl font-semibold">{value}</p>
-          <p className="text-sm text-slate-500">{label}</p>
+          <p className="text-xl font-semibold sm:text-2xl">{value}</p>
+          <p className="text-[11px] leading-tight text-slate-500 sm:text-sm">{label}</p>
         </div>
       </div>
     </div>
@@ -243,7 +243,7 @@ function CourseSearchPanel({
             先找到你想加入的课程，再进入课程空间查看 AI 学习与课堂资料。
           </p>
         </div>
-        <div className="liquid-soft flex items-center gap-2 rounded-full px-4 py-3">
+        <div className="liquid-soft flex w-full items-center gap-2 rounded-full px-4 py-3 sm:w-auto sm:min-w-72">
           <Search size={16} className="text-slate-500" />
           <input
             className="w-full bg-transparent text-sm outline-none placeholder:text-slate-400"
@@ -271,14 +271,14 @@ function CourseSearchResult({
   onJoin: (id: string) => void;
 }) {
   return (
-    <div className="rounded-[30px] border border-white/80 bg-white/60 p-5 shadow-[0_18px_40px_rgba(31,47,62,0.08)] backdrop-blur-md">
-      <div className="flex items-start justify-between gap-4">
+    <div className="rounded-[28px] border border-white/80 bg-white/60 p-4 shadow-[0_18px_40px_rgba(31,47,62,0.08)] backdrop-blur-md sm:rounded-[30px] sm:p-5">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
         <div className="min-w-0">
           <p className="text-sm font-semibold text-slate-900">{course.courseName}</p>
           <p className="mt-2 text-sm text-slate-600">{course.teacher}</p>
         </div>
         <button
-          className="rounded-full bg-slate-950 px-4 py-2 text-sm font-semibold text-white transition hover:bg-slate-800"
+          className="min-h-11 rounded-full bg-slate-950 px-4 py-2 text-sm font-semibold text-white transition hover:bg-slate-800 sm:min-h-0"
           type="button"
           onClick={() => onJoin(course.id)}
         >
@@ -310,7 +310,7 @@ function AddCoursePanel() {
         <TextCard title="导入课表" description="从已有课表、课堂资料或课程清单快速生成。" icon={<FolderOpen size={18} />} />
       </div>
 
-      <div className="liquid-soft rounded-[30px] p-5">
+      <div className="liquid-soft rounded-[28px] p-4 sm:rounded-[30px] sm:p-5">
         <div className="flex items-center gap-3">
           <Layers size={20} className="text-teal-700" />
           <div>
@@ -363,24 +363,24 @@ function CourseCard({
   onOpen: (id: string) => void;
 }) {
   return (
-    <article className="liquid-soft rounded-[30px] p-5 transition hover:-translate-y-0.5 hover:shadow-xl hover:shadow-slate-900/10">
+    <article className="liquid-soft rounded-[28px] p-4 transition hover:-translate-y-0.5 hover:shadow-xl hover:shadow-slate-900/10 sm:rounded-[30px] sm:p-5">
       <div className="flex items-start justify-between gap-4">
         <div className="min-w-0">
           <p className="text-sm font-semibold text-slate-900">{course.courseName}</p>
           <p className="mt-2 text-xs text-slate-600">{course.teacher}</p>
         </div>
-        <span className="rounded-full bg-emerald-50 px-3 py-1 text-[11px] font-semibold text-emerald-700">
+        <span className="shrink-0 rounded-full bg-emerald-50 px-3 py-1 text-[11px] font-semibold text-emerald-700">
           {course.status}
         </span>
       </div>
       <p className="mt-4 text-sm leading-6 text-slate-600">{course.description}</p>
       <div className="mt-4 grid gap-2 text-sm text-slate-600">
-        <p className="flex items-center gap-2"><CircleDot size={14} />{course.nextSession} · {course.location}</p>
-        <p className="flex items-center gap-2"><Users size={14} />{course.studentCount} 人已加入</p>
+        <p className="flex min-w-0 items-center gap-2"><CircleDot size={14} className="shrink-0" />{course.nextSession} · {course.location}</p>
+        <p className="flex min-w-0 items-center gap-2"><Users size={14} className="shrink-0" />{course.studentCount} 人已加入</p>
       </div>
       <div className="mt-4 flex flex-wrap gap-2">
         <button
-          className="rounded-full bg-slate-950 px-4 py-2 text-sm font-semibold text-white transition hover:bg-slate-800"
+          className="min-h-11 rounded-full bg-slate-950 px-4 py-2 text-sm font-semibold text-white transition hover:bg-slate-800 sm:min-h-0"
           type="button"
           onClick={() => onOpen(course.id)}
         >
@@ -399,7 +399,7 @@ function CourseCard({
 
 function TextCard({ title, description, icon }: { title: string; description: string; icon: React.ReactNode }) {
   return (
-    <div className="rounded-[30px] border border-white/80 bg-white/60 p-5 backdrop-blur-md">
+    <div className="rounded-[28px] border border-white/80 bg-white/60 p-4 backdrop-blur-md sm:rounded-[30px] sm:p-5">
       <div className="flex items-center gap-3 text-slate-900">
         <span className="rounded-2xl bg-slate-100 p-3 text-slate-700">{icon}</span>
         <p className="font-semibold">{title}</p>
@@ -414,7 +414,7 @@ function CourseDetail({ course, onBack }: { course: CourseDetail; onBack: () => 
 
   return (
     <div className="space-y-6">
-      <div className="liquid-glass rounded-[32px] p-5 sm:p-6">
+      <div className="liquid-glass rounded-[28px] p-4 sm:rounded-[32px] sm:p-6">
         <button
           className="liquid-soft mb-4 inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-semibold text-slate-700"
           onClick={onBack}
@@ -432,7 +432,7 @@ function CourseDetail({ course, onBack }: { course: CourseDetail; onBack: () => 
                 {course.members.length} 位成员
               </span>
             </div>
-            <h2 className="mt-4 text-3xl font-semibold text-slate-950">{course.courseName}</h2>
+            <h2 className="mt-4 text-2xl font-semibold text-slate-950 sm:text-3xl">{course.courseName}</h2>
             <p className="mt-3 max-w-2xl text-sm leading-7 text-slate-600">{course.summary}</p>
           </div>
           <div className="grid gap-3 rounded-[30px] border border-white/70 bg-white/60 p-4 backdrop-blur-md">
@@ -444,13 +444,13 @@ function CourseDetail({ course, onBack }: { course: CourseDetail; onBack: () => 
         </div>
       </div>
 
-      <div className="liquid-soft rounded-[32px] p-3 shadow-[0_18px_50px_rgba(31,47,62,0.08)]">
-        <div className="overflow-x-auto">
-          <div className="inline-flex gap-2 p-2">
+      <div className="liquid-soft rounded-[28px] p-2 shadow-[0_18px_50px_rgba(31,47,62,0.08)] sm:rounded-[32px] sm:p-3">
+        <div className="overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+          <div className="inline-flex min-w-max gap-2 p-1 sm:p-2">
             {tabItems.map((tab) => (
               <button
                 key={tab.key}
-                className={`rounded-full px-4 py-2 text-sm font-semibold transition ${
+                className={`shrink-0 rounded-full px-3 py-2 text-sm font-semibold transition sm:px-4 ${
                   activeTab === tab.key
                     ? "bg-slate-950 text-white"
                     : "bg-white/85 text-slate-700 hover:bg-white"
@@ -490,7 +490,7 @@ function DetailStat({ label, value }: { label: string; value: string | number })
 function CourseOverview({ course }: { course: CourseDetail }) {
   return (
     <div className="grid gap-5 xl:grid-cols-[1.3fr_0.9fr]">
-      <section className="liquid-glass rounded-[32px] p-5 sm:p-6">
+      <section className="liquid-glass rounded-[28px] p-4 sm:rounded-[32px] sm:p-6">
         <div className="flex items-center gap-3 text-slate-950">
           <Sparkles size={20} className="text-teal-700" />
           <div>
@@ -505,7 +505,7 @@ function CourseOverview({ course }: { course: CourseDetail }) {
           <DDLCard items={course.upcomingDDL} />
         </div>
       </section>
-      <section className="liquid-soft rounded-[32px] p-5 sm:p-6">
+      <section className="liquid-soft rounded-[28px] p-4 sm:rounded-[32px] sm:p-6">
         <p className="text-sm font-semibold text-teal-700">课堂速查</p>
         <div className="mt-4 space-y-3">
           {course.notes.map((note) => (
@@ -526,7 +526,7 @@ function CourseOverview({ course }: { course: CourseDetail }) {
 
 function InfoCard({ label, values }: { label: string; values: string[] }) {
   return (
-    <div className="rounded-[28px] border border-white/70 bg-white/70 p-5 backdrop-blur-md">
+    <div className="rounded-[26px] border border-white/70 bg-white/70 p-4 backdrop-blur-md sm:rounded-[28px] sm:p-5">
       <p className="text-sm font-semibold text-slate-900">{label}</p>
       <div className="mt-4 space-y-2 text-sm text-slate-600">
         {values.map((item) => (
@@ -539,7 +539,7 @@ function InfoCard({ label, values }: { label: string; values: string[] }) {
 
 function DDLCard({ items }: { items: CourseDetail["upcomingDDL"] }) {
   return (
-    <div className="rounded-[28px] border border-white/70 bg-white/70 p-5 backdrop-blur-md">
+    <div className="rounded-[26px] border border-white/70 bg-white/70 p-4 backdrop-blur-md sm:rounded-[28px] sm:p-5">
       <p className="text-sm font-semibold text-slate-900">近期 DDL</p>
       <div className="mt-4 space-y-3">
         {items.map((item) => (
@@ -556,7 +556,7 @@ function DDLCard({ items }: { items: CourseDetail["upcomingDDL"] }) {
 function CourseChat({ course }: { course: CourseDetail }) {
   return (
     <div className="grid gap-5 xl:grid-cols-[1.2fr_0.8fr]">
-      <section className="liquid-glass rounded-[32px] p-5 sm:p-6">
+      <section className="liquid-glass rounded-[28px] p-4 sm:rounded-[32px] sm:p-6">
         <div className="flex items-center gap-3 text-slate-950">
           <MessageCircle size={20} className="text-blue-700" />
           <div>
@@ -569,9 +569,9 @@ function CourseChat({ course }: { course: CourseDetail }) {
           <ChatMessage author="AI 助教" role="AI" text="建议从题干中的边际成本角度先做第一步，你可以先试着写出成本函数。" />
           <ChatMessage author="你" role="学生" text="我觉得这题应该用均衡条件，但不确定怎么表达。" />
         </div>
-        <div className="mt-6 flex items-center gap-3 rounded-3xl border border-white/70 bg-white/60 p-3 backdrop-blur-md">
+        <div className="mt-6 flex flex-col gap-3 rounded-3xl border border-white/70 bg-white/60 p-3 backdrop-blur-md sm:flex-row sm:items-center">
           <input className="w-full bg-transparent text-sm outline-none placeholder:text-slate-400" placeholder="发一条课程消息" />
-          <button className="rounded-full bg-slate-950 px-4 py-2 text-sm font-semibold text-white">发送</button>
+          <button className="min-h-11 w-full rounded-full bg-slate-950 px-4 py-2 text-sm font-semibold text-white sm:min-h-0 sm:w-auto" type="button">发送</button>
         </div>
       </section>
       <aside className="space-y-4">
@@ -585,7 +585,7 @@ function CourseChat({ course }: { course: CourseDetail }) {
 function ChatMessage({ author, role, text }: { author: string; role: string; text: string; }) {
   return (
     <div className="rounded-[28px] border border-white/75 bg-white/70 p-4 text-sm text-slate-700 backdrop-blur-md">
-      <div className="flex items-center justify-between gap-2">
+      <div className="flex flex-wrap items-center justify-between gap-2">
         <p className="font-semibold text-slate-950">{author}</p>
         <span className="rounded-full bg-slate-100 px-2 py-1 text-[11px] text-slate-600">{role}</span>
       </div>
@@ -611,7 +611,7 @@ function SmallInfoCard({ icon, title, description }: { icon: React.ReactNode; ti
 function CourseNotes({ course }: { course: CourseDetail }) {
   return (
     <div className="grid gap-5 xl:grid-cols-[1.4fr_0.8fr]">
-      <section className="liquid-glass rounded-[32px] p-5 sm:p-6">
+      <section className="liquid-glass rounded-[28px] p-4 sm:rounded-[32px] sm:p-6">
         <div className="flex items-center gap-3 text-slate-950">
           <BookOpen size={20} className="text-violet-700" />
           <div>
@@ -621,7 +621,7 @@ function CourseNotes({ course }: { course: CourseDetail }) {
         </div>
         <div className="mt-6 grid gap-4">
           {course.notes.map((note) => (
-            <div key={note.id} className="rounded-[28px] border border-white/70 bg-white/70 p-5 backdrop-blur-md">
+            <div key={note.id} className="rounded-[26px] border border-white/70 bg-white/70 p-4 backdrop-blur-md sm:rounded-[28px] sm:p-5">
               <p className="text-sm font-semibold text-slate-950">{note.title}</p>
               <p className="mt-2 text-sm text-slate-600">{note.summary}</p>
               <div className="mt-3 flex flex-wrap gap-2 text-[11px] text-slate-700">
@@ -669,7 +669,7 @@ function SkillsAI({ course }: { course: CourseDetail }) {
     <div className="grid gap-5 xl:grid-cols-[1.4fr_0.95fr]">
       <div className="space-y-5">
         <SkillsAIContextCard course={course} />
-        <div className="liquid-glass rounded-[32px] p-5 sm:p-6">
+        <div className="liquid-glass rounded-[28px] p-4 sm:rounded-[32px] sm:p-6">
           <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
             <div>
               <p className="text-sm font-semibold text-teal-700">AI 自学 / Skills AI</p>
@@ -692,7 +692,7 @@ function SkillsAI({ course }: { course: CourseDetail }) {
 
 function SkillsAIContextCard({ course }: { course: CourseDetail }) {
   return (
-    <div className="liquid-soft rounded-[32px] p-5 sm:p-6">
+    <div className="liquid-soft rounded-[28px] p-4 sm:rounded-[32px] sm:p-6">
       <div className="flex items-center gap-3 text-slate-950">
         <Sparkles size={20} className="text-emerald-700" />
         <div>
@@ -757,18 +757,18 @@ function SkillsAITutorPanel({
   onSend: () => void;
 }) {
   return (
-    <div className="mt-5 rounded-[32px] border border-white/70 bg-white/60 p-4 shadow-[0_18px_40px_rgba(31,47,62,0.08)] backdrop-blur-md">
-      <div className="max-h-[520px] space-y-4 overflow-auto pr-2">
+    <div className="mt-5 rounded-[28px] border border-white/70 bg-white/60 p-3 shadow-[0_18px_40px_rgba(31,47,62,0.08)] backdrop-blur-md sm:rounded-[32px] sm:p-4">
+      <div className="max-h-[420px] space-y-3 overflow-auto pr-1 sm:max-h-[520px] sm:space-y-4 sm:pr-2">
         {messages.map((message) => (
           <div
             key={message.id}
-            className={`rounded-[28px] p-4 ${
+            className={`rounded-[24px] p-4 sm:rounded-[28px] ${
               message.sender === "tutor"
                 ? "bg-slate-950 text-white"
                 : "bg-slate-50 text-slate-800"
             }`}
           >
-            <div className="flex items-center justify-between gap-2 text-xs text-slate-500">
+            <div className="flex flex-wrap items-center justify-between gap-2 text-xs text-slate-500">
               <span>{message.sender === "tutor" ? "AI 助教" : "你"}</span>
               <span>{message.time}</span>
             </div>
@@ -808,7 +808,7 @@ function SkillsAISidebar({ course }: { course: CourseDetail }) {
 
 function SkillsAIPracticeCard() {
   return (
-    <div className="liquid-soft rounded-[32px] p-5">
+    <div className="liquid-soft rounded-[28px] p-4 sm:rounded-[32px] sm:p-5">
       <div className="flex items-center gap-3 text-slate-950">
         <FileCheck size={20} className="text-teal-700" />
         <div>
@@ -834,7 +834,7 @@ function SkillsAIMistakeBook({
   mistakes: Array<{ id: string; title: string; reason: string; nextReview: string }>;
 }) {
   return (
-    <div className="liquid-soft rounded-[32px] p-5">
+    <div className="liquid-soft rounded-[28px] p-4 sm:rounded-[32px] sm:p-5">
       <div className="flex items-center gap-3 text-slate-950">
         <Award size={20} className="text-amber-700" />
         <div>
@@ -858,7 +858,7 @@ function SkillsAIMistakeBook({
 function CourseDDL({ course }: { course: CourseDetail }) {
   return (
     <div className="flex flex-col gap-5 xl:flex-row xl:items-start xl:gap-5">
-      <section className="liquid-glass rounded-[32px] p-5 sm:p-6 xl:flex-1">
+      <section className="liquid-glass rounded-[28px] p-4 sm:rounded-[32px] sm:p-6 xl:flex-1">
         <div className="flex items-center gap-3 text-slate-950">
           <CircleDollarSign size={20} className="text-amber-700" />
           <div>
@@ -868,8 +868,8 @@ function CourseDDL({ course }: { course: CourseDetail }) {
         </div>
         <div className="mt-6 space-y-4">
           {course.upcomingDDL.map((item) => (
-            <div key={item.id} className="rounded-[28px] border border-white/70 bg-white/70 p-4 backdrop-blur-md">
-              <div className="flex items-center justify-between gap-3">
+            <div key={item.id} className="rounded-[26px] border border-white/70 bg-white/70 p-4 backdrop-blur-md sm:rounded-[28px]">
+              <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                 <p className="font-semibold text-slate-950">{item.title}</p>
                 <span className="rounded-full bg-slate-100 px-3 py-1 text-[11px] text-slate-700">{item.type}</span>
               </div>
@@ -889,7 +889,7 @@ function CourseDDL({ course }: { course: CourseDetail }) {
 function CourseMembers({ course }: { course: CourseDetail }) {
   return (
     <div className="grid gap-5 xl:grid-cols-[1.3fr_0.9fr]">
-      <section className="liquid-glass rounded-[32px] p-5 sm:p-6">
+      <section className="liquid-glass rounded-[28px] p-4 sm:rounded-[32px] sm:p-6">
         <div className="flex items-center gap-3 text-slate-950">
           <Users size={20} className="text-blue-700" />
           <div>
@@ -900,7 +900,7 @@ function CourseMembers({ course }: { course: CourseDetail }) {
         <div className="mt-6 space-y-3">
           {course.members.map((member) => (
             <div key={member.id} className="rounded-3xl border border-white/70 bg-white/70 p-4 backdrop-blur-md">
-              <div className="flex items-center justify-between gap-3">
+              <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                 <div>
                   <p className="font-semibold text-slate-950">{member.name}</p>
                   <p className="mt-1 text-sm text-slate-600">{member.role}</p>
@@ -922,7 +922,7 @@ function CourseMembers({ course }: { course: CourseDetail }) {
 function CourseTeams({ course }: { course: CourseDetail }) {
   return (
     <div className="grid gap-5">
-      <section className="liquid-glass rounded-[32px] p-5 sm:p-6">
+      <section className="liquid-glass rounded-[28px] p-4 sm:rounded-[32px] sm:p-6">
         <div className="flex items-center gap-3 text-slate-950">
           <Puzzle size={20} className="text-emerald-700" />
           <div>
@@ -932,8 +932,8 @@ function CourseTeams({ course }: { course: CourseDetail }) {
         </div>
         <div className="mt-6 grid gap-4">
           {course.teams.map((team) => (
-            <div key={team.id} className="rounded-[28px] border border-white/70 bg-white/70 p-5 backdrop-blur-md">
-              <div className="flex items-center justify-between gap-3">
+            <div key={team.id} className="rounded-[26px] border border-white/70 bg-white/70 p-4 backdrop-blur-md sm:rounded-[28px] sm:p-5">
+              <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                 <p className="text-sm font-semibold text-slate-950">{team.title}</p>
                 <span className="rounded-full bg-slate-100 px-3 py-1 text-[11px] text-slate-700">{team.progress}</span>
               </div>

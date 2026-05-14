@@ -61,8 +61,8 @@ export function GlobalDock() {
   const pathname = usePathname();
 
   return (
-    <nav className="fixed bottom-4 left-1/2 z-50 w-[min(calc(100vw-1rem),56rem)] -translate-x-1/2 sm:bottom-5">
-      <div className="liquid-dock mx-auto flex items-end justify-between gap-1 rounded-full px-3 py-3 sm:gap-3 sm:px-5">
+    <nav className="fixed bottom-[calc(0.55rem+env(safe-area-inset-bottom,0px))] left-1/2 z-50 w-[min(calc(100vw-0.9rem),34rem)] -translate-x-1/2 sm:bottom-[calc(1rem+env(safe-area-inset-bottom,0px))] sm:w-[min(calc(100vw-2rem),56rem)]">
+      <div className="liquid-dock mx-auto grid grid-cols-5 items-end gap-0.5 rounded-[30px] px-2 py-2 sm:flex sm:justify-between sm:gap-3 sm:rounded-full sm:px-5 sm:py-3">
         {dockItems.map((item) => {
           const active = item.match(pathname);
 
@@ -70,7 +70,7 @@ export function GlobalDock() {
             <Link
               aria-current={active ? "page" : undefined}
               aria-label={item.label}
-              className="group flex min-w-0 flex-1 flex-col items-center gap-2"
+              className="group flex min-w-0 flex-col items-center gap-1.5 rounded-3xl px-1 py-1 transition active:scale-[0.98] sm:flex-1 sm:gap-2 sm:px-0 sm:py-0"
               href={item.href}
               key={item.href}
               title={item.description}
@@ -78,14 +78,14 @@ export function GlobalDock() {
               <span
                 className={`liquid-dock-orb flex items-center justify-center rounded-full transition duration-200 ${
                   active
-                    ? "h-[86px] w-[86px] text-slate-950 sm:h-28 sm:w-28"
-                    : "h-[68px] w-[68px] text-slate-700 sm:h-[86px] sm:w-[86px]"
+                    ? "h-12 w-12 text-slate-950 sm:h-24 sm:w-24 lg:h-28 lg:w-28"
+                    : "h-10 w-10 text-slate-700 sm:h-20 sm:w-20 lg:h-[86px] lg:w-[86px]"
                 }`}
               >
                 {item.icon}
               </span>
               <span
-                className={`text-sm font-semibold transition sm:text-base ${
+                className={`text-[11px] font-semibold leading-none transition sm:text-base ${
                   active ? "text-slate-950" : "text-slate-500"
                 }`}
               >

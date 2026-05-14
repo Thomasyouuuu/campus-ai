@@ -1,13 +1,5 @@
-import { GlobalDock } from "@/components/navigation/GlobalDock";
-import { ScheduleWorkspace } from "@/components/schedule/ScheduleWorkspace";
+import { SchedulePage } from "@/modules/schedule";
 
-export default function SchedulePage() {
-  return (
-    <>
-      <div className="pb-48">
-        <ScheduleWorkspace />
-      </div>
-      <GlobalDock />
-    </>
-  );
+export default function Page() {
+  return <SchedulePage />;
 }

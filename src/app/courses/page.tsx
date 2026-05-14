@@ -1,13 +1,5 @@
-import { CoursesWorkspace } from "@/components/course/CoursesWorkspace";
-import { GlobalDock } from "@/components/navigation/GlobalDock";
+import { CoursesPage } from "@/modules/courses";
 
-export default function CoursesPage() {
-  return (
-    <>
-      <div className="pb-48">
-        <CoursesWorkspace />
-      </div>
-      <GlobalDock />
-    </>
-  );
+export default function Page() {
+  return <CoursesPage />;
 }

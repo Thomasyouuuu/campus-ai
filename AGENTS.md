@@ -212,3 +212,65 @@ git diff main
 - 不破坏现有代码结构
 
 把不确定的决策记录到 `DEVELOPMENT_SUMMARY.md`。
+
+## 模块化架构规则
+
+本项目采用按业务模块拆分的结构。
+
+### 路由层
+
+`src/app` 只负责 Next.js 路由，不承载复杂业务逻辑。
+
+例如：
+
+- `src/app/courses/page.tsx` 只导入并渲染 `CoursesPage`
+- `src/app/schedule/page.tsx` 只导入并渲染 `SchedulePage`
+- `src/app/ai/page.tsx` 只导入并渲染 `AIPage`
+
+### 业务模块层
+
+每个主功能必须放在独立模块中：
+
+- `src/modules/home`
+- `src/modules/schedule`
+- `src/modules/ai`
+- `src/modules/courses`
+- `src/modules/clubs`
+
+每个模块内部可包含：
+
+- `components/`：该模块专属组件
+- `hooks/`：该模块专属状态逻辑
+- `data/`：mock 数据或静态配置
+- `types.ts`：该模块专属类型
+- `utils.ts`：该模块专属工具函数
+- `index.ts`：统一导出入口
+
+### 通用组件层
+
+真正跨模块复用的组件放在：
+
+- `src/components/ui`
+- `src/components/layout`
+
+例如：
+
+- `GlassCard`
+- `PrimaryButton`
+- `SearchInput`
+- `EmptyState`
+- `BottomTabBar`
+- `AppShell`
+
+不要把业务组件放进 `src/components/ui`。
+
+### 代码边界规则
+
+1. 不要把所有逻辑写进 `page.tsx`。
+2. 不要让一个模块直接修改另一个模块的内部文件。
+3. 如果有跨模块复用需求，先抽象到 `src/components`、`src/lib` 或 `src/types`。
+4. 每个模块应该可以独立精修、独立测试、独立替换。
+5. 修改课程模块时，除非必要，不要改动日程、AI、社团模块。
+6. 修改社团模块时，除非必要，不要改动课程、日程、AI 模块。
+7. 每完成一个模块，运行 `npm run lint` 和 `npm run build`。
+8. 每完成一个模块，在 `DEVELOPMENT_SUMMARY.md` 中记录该模块的改动。
