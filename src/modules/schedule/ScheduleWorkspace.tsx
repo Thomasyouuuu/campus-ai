@@ -11,12 +11,13 @@ import {
   Plus,
   Search,
   Trash2,
-  WifiOff,
   X,
 } from "lucide-react";
 import {
   FormEvent,
+  KeyboardEvent as ReactKeyboardEvent,
   PointerEvent as ReactPointerEvent,
+  ReactNode,
   WheelEvent as ReactWheelEvent,
   useEffect,
   useMemo,
@@ -33,11 +34,11 @@ import type {
 } from "@/types/schedule";
 
 const storageKey = "campus-ai-schedule-v2";
-const dayHeaderHeight = 88;
-const minHourHeight = 34;
-const maxHourHeight = 132;
-const compactThreshold = 44;
-const defaultHourHeight = 92;
+const dayHeaderHeight = 76;
+const minHourHeight = 28;
+const maxHourHeight = 112;
+const compactThreshold = 36;
+const defaultHourHeight = 66;
 const minDayWidth = 68;
 const maxDayWidth = 240;
 const timeColumnWidth = 72;
@@ -198,6 +199,14 @@ export function ScheduleWorkspace({
     setEditorState(null);
   }
 
+  function updateCourseVisibility(id: string, visibility: CourseVisibility) {
+    setCourses((current) =>
+      current.map((course) =>
+        course.id === id ? { ...course, visibility } : course,
+      ),
+    );
+  }
+
   return (
     <main
       className={
@@ -256,6 +265,7 @@ export function ScheduleWorkspace({
             courses={visibleCourses}
             days={[...weekdays]}
             onOpenCourse={openEditEditor}
+            onVisibilityChange={updateCourseVisibility}
           />
 
           <div
@@ -295,11 +305,13 @@ function ScheduleTable({
   courses,
   days,
   onOpenCourse,
+  onVisibilityChange,
 }: {
   activeWeekday: number;
   courses: ScheduleCourse[];
   days: Array<(typeof weekdays)[number]>;
   onOpenCourse: (course: ScheduleCourse) => void;
+  onVisibilityChange: (id: string, visibility: CourseVisibility) => void;
 }) {
   const tableRef = useRef<HTMLDivElement>(null);
   const headerRef = useRef<HTMLDivElement>(null);
@@ -323,7 +335,7 @@ function ScheduleTable({
   const hourHeight = clamp(defaultHourHeight * scale, minHourHeight, maxHourHeight);
   const dayWidth = clamp(baseDayWidth * scale, minDayWidth, maxDayWidth);
   const isCompact = hourHeight <= compactThreshold || dayWidth <= 76;
-  const viewportHeight = defaultHourHeight * 6;
+  const viewportHeight = defaultHourHeight * 7;
   const contentHeight = hourHeight * 24;
   const gridTemplateColumns = `${timeColumnWidth}px repeat(${days.length}, ${dayWidth}px)`;
 
@@ -582,6 +594,7 @@ function ScheduleTable({
                   isCompact={isCompact}
                   key={course.id}
                   onClick={() => onOpenCourse(course)}
+                  onVisibilityChange={onVisibilityChange}
                 />
               ))}
             </div>
@@ -610,28 +623,31 @@ function ScheduleBlock({
   hourHeight,
   isCompact,
   onClick,
+  onVisibilityChange,
 }: {
   course: ScheduleCourse;
   dayWidth: number;
   hourHeight: number;
   isCompact: boolean;
   onClick: () => void;
+  onVisibilityChange: (id: string, visibility: CourseVisibility) => void;
 }) {
   const startMinutes = timeToMinutes(course.startTime);
   const endMinutes = timeToMinutes(course.endTime);
   const top = (startMinutes / 60) * hourHeight;
   const rawHeight = Math.max(((endMinutes - startMinutes) / 60) * hourHeight, 24);
   const isPersonal = course.itemType === "personal";
-  const showStatusIcons = rawHeight >= 108 && dayWidth >= 170;
-  const showTimeAndPlace = rawHeight >= 82 && dayWidth >= 108;
-  const showTypeIcon = rawHeight >= 76 && dayWidth >= 96;
+  const showStatusIcons = rawHeight >= 82 && dayWidth >= 170;
+  const showTimeAndPlace = rawHeight >= 62 && dayWidth >= 108;
+  const showTypeIcon = rawHeight >= 58 && dayWidth >= 96;
   const TypeIcon = isPersonal ? Coffee : BookOpen;
-  const VisibilityIcon =
-    course.visibility === "public"
-      ? Eye
-      : course.visibility === "busy"
-        ? Clock3
-        : EyeOff;
+
+  function handleKeyDown(event: ReactKeyboardEvent<HTMLElement>) {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      onClick();
+    }
+  }
 
   if (isCompact) {
     return (
@@ -655,16 +671,18 @@ function ScheduleBlock({
   }
 
   return (
-    <button
+    <article
       className={`liquid-distort-glass absolute left-1.5 right-1.5 overflow-hidden rounded-[18px] px-3 py-2 text-left transition active:scale-[0.99] sm:left-3 sm:right-3 sm:rounded-[24px] sm:px-4 sm:py-3 ${
         isPersonal ? "text-[#0f55c8]" : "text-[#14532d]"
       }`}
       onClick={onClick}
+      onKeyDown={handleKeyDown}
+      role="button"
       style={{
-        height: Math.max(rawHeight, 72),
+        height: Math.max(rawHeight, 58),
         top,
       }}
-      type="button"
+      tabIndex={0}
     >
       <div className="glass-lens" />
       <span
@@ -673,11 +691,11 @@ function ScheduleBlock({
         }`}
         aria-hidden="true"
       />
-      <div className="relative z-10 flex h-full min-h-0 flex-col justify-between gap-2 pl-5">
+      <div className="relative z-10 flex h-full min-h-0 flex-col justify-between gap-1.5 pl-5">
         <div className="min-w-0">
           <div className="flex items-start justify-between gap-2">
             <span
-              className={`inline-flex shrink-0 items-center gap-1 whitespace-nowrap rounded-full px-2.5 py-1 text-[10px] font-semibold sm:text-xs ${
+              className={`inline-flex shrink-0 items-center gap-1 whitespace-nowrap rounded-full px-2.5 py-0.5 text-[10px] font-semibold sm:text-xs ${
                 isPersonal
                   ? "bg-sky-100/58 text-sky-800"
                   : "bg-emerald-50/58 text-emerald-800"
@@ -687,40 +705,79 @@ function ScheduleBlock({
               {isPersonal ? "安排" : "课程"}
             </span>
             {showStatusIcons && (
-              <span className="liquid-soft inline-flex shrink-0 items-center gap-1 rounded-full px-1.5 py-1 text-slate-600">
-                <span className="flex h-7 w-7 items-center justify-center rounded-full bg-slate-950 text-white shadow-lg shadow-slate-950/20">
-                  <VisibilityIcon size={14} />
-                </span>
-                <span className="flex h-7 w-7 items-center justify-center rounded-full bg-white/34">
-                  <Clock3 size={14} />
-                </span>
-                <span className="flex h-7 w-7 items-center justify-center rounded-full bg-white/34">
-                  {course.visibility === "busy" ? (
-                    <WifiOff size={14} />
-                  ) : (
-                    <EyeOff size={14} />
-                  )}
-                </span>
-              </span>
+              <VisibilityRail
+                courseId={course.id}
+                onChange={onVisibilityChange}
+                value={course.visibility}
+              />
             )}
           </div>
-          <h3 className="mt-3 truncate text-xl font-semibold leading-tight sm:text-2xl">
+          <h3 className="mt-2 truncate text-lg font-semibold leading-tight sm:text-xl">
             {course.courseName}
           </h3>
           {showTimeAndPlace && (
-            <p className="mt-2 truncate text-base font-semibold text-slate-600/90 sm:text-lg">
+            <p className="mt-1 truncate text-sm font-semibold text-slate-600/90 sm:text-base">
               {course.startTime} - {course.endTime}
             </p>
           )}
         </div>
         {showTimeAndPlace && (
-          <div className="flex min-w-0 items-center gap-2 text-sm font-semibold text-slate-600/85 sm:text-base">
-            <MapPin size={18} className="shrink-0" />
+          <div className="flex min-w-0 items-center gap-1.5 text-xs font-semibold text-slate-600/85 sm:text-sm">
+            <MapPin size={15} className="shrink-0" />
             <span className="truncate">{course.location || "未填写地点"}</span>
           </div>
         )}
       </div>
-    </button>
+    </article>
+  );
+}
+
+function VisibilityRail({
+  courseId,
+  onChange,
+  value,
+}: {
+  courseId: string;
+  onChange: (id: string, visibility: CourseVisibility) => void;
+  value: CourseVisibility;
+}) {
+  const options: Array<{
+    icon: ReactNode;
+    label: string;
+    value: CourseVisibility;
+  }> = [
+    { icon: <Eye size={14} />, label: "显示给他人", value: "public" },
+    { icon: <Clock3 size={14} />, label: "不显示详细事项", value: "busy" },
+    { icon: <EyeOff size={14} />, label: "隐藏", value: "private" },
+  ];
+
+  return (
+    <div
+      className="liquid-soft inline-flex shrink-0 items-center gap-1 rounded-full px-1.5 py-1 text-slate-600"
+      onClick={(event) => event.stopPropagation()}
+      onKeyDown={(event) => event.stopPropagation()}
+      role="group"
+      aria-label="对他人可见状态"
+    >
+      {options.map((option) => (
+        <button
+          aria-label={option.label}
+          className={`flex h-7 w-7 items-center justify-center rounded-full transition ${
+            value === option.value
+              ? "bg-slate-950 text-white shadow-lg shadow-slate-950/20"
+              : "bg-white/34 text-slate-600 hover:bg-white/58"
+          }`}
+          key={option.value}
+          onClick={(event) => {
+            event.stopPropagation();
+            onChange(courseId, option.value);
+          }}
+          type="button"
+        >
+          {option.icon}
+        </button>
+      ))}
+    </div>
   );
 }
 
