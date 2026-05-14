@@ -191,14 +191,9 @@ export function ChatPage() {
     : null;
 
   return (
-    <AppShell contentClassName="gap-0 pt-0 lg:px-4 lg:pt-4">
-      <div
-        className="flex w-full"
-        style={{
-          height:
-            "calc(100dvh - var(--bottom-tab-height) - var(--safe-bottom) - 2.25rem)",
-        }}
-      >
+    <AppShell contentClassName="gap-0 pt-0 !pb-0 flex flex-col flex-1 lg:px-4 lg:pt-4 lg:pb-[calc(var(--bottom-tab-height)+var(--safe-bottom)+1.25rem)]">
+      {/* Full-height flex container */}
+      <div className="flex w-full flex-1 min-h-0 lg:gap-0">
         {/* Desktop sidebar */}
         <ConversationSidebar
           activeId={activeId}
@@ -226,17 +221,6 @@ export function ChatPage() {
 
         {/* Main chat area */}
         <div className="flex min-w-0 flex-1 flex-col lg:rounded-r-[28px] lg:border lg:border-l-0 lg:border-white/60 lg:bg-white/10 lg:backdrop-blur-xl">
-          {/* Mobile hamburger */}
-          <div className="flex shrink-0 items-center gap-2 px-4 pt-4 lg:hidden">
-            <button
-              className="liquid-soft flex h-10 w-10 items-center justify-center rounded-2xl text-slate-600 active:scale-95"
-              onClick={() => setShowSidebar(true)}
-              type="button"
-            >
-              <Menu size={20} />
-            </button>
-          </div>
-
           <ChatHeader
             activeMode={activeMode}
             allModes={allModes}
@@ -247,6 +231,7 @@ export function ChatPage() {
             onEditAgent={handleEditAgent}
             onOpenSettings={handleOpenSettings}
             onSwitchMode={handleSwitchMode}
+            onToggleSidebar={() => setShowSidebar(true)}
           />
 
           {error && (
